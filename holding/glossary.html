@@ -1,0 +1,167 @@
+<html ng-app="ContactDatabaseApp">
+
+<head>
+    <!-- THEME FILES -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+    <link href="assets/css/custom-styles.css" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+    <link href="assets/js/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+    <!-- ANGULARJS FILES -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0-rc.0/angular-sanitize.js"></script>
+    <!-- ANGULAR BOOTSTRAP UI -->
+
+    <!-- CUSTOM FILES -->
+    <link href="nctc/style.css" rel="stylesheet" />
+</head>
+<body>
+
+<div id="wrapper">
+    <div id="page-wrapper" style="margin: 0; top: 0">
+        <div id="page-inner" ng-controller="glossaryCtrl">
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="page-header">Contract Database <small>NCTC Staff</small></h1>
+                </div>
+            </div>
+
+          <div class="row">
+
+                <div class="col-md-6 col-sm-6">
+                    <div class="panel panel-default" style="padding: 10px;">
+
+                        <div ng-show="showLoader" style="float: right; width: 100px;padding-left: 10px;">
+
+                            <div class="spinner" style="margin: 0px; float: right;">
+                              <div class="rect1"></div>
+                              <div class="rect2"></div>
+                              <div class="rect3"></div>
+                              <div class="rect4"></div>
+                              <div class="rect5"></div>
+                            </div>
+                        </div>
+
+
+                        <!--
+                        <button ng-click="getResult()" id="btnMakeCall">getResult</button>
+                        <button ng-click="getNetworks()" id="btnMakeCall">getNetworks</button>
+                        <button ng-click="getCategories()" id="btnMakeCall">getCategories</button>
+                        -->
+
+                        <div class="form-group input-group">
+                            <span class="input-group-addon">Search Term</span>
+                            <input type="text" ng-model="search_term" class="form-control" placeholder="enter glossary term">
+                        </div>
+
+
+                        <div class="form-group input-group">
+                            <span class="input-group-addon">Agreements </span>
+                            <select
+                                class="form-control"
+                                ng-options="agrName as agrName.GlossaryTerm for agrName in agreements"
+                                ng-model="glossary_agreement_item"
+                                ng-change="filterAgreements()">
+                            </select>
+                        </div>
+
+
+
+
+                        <div class="panel-heading">
+                             Results from Contract Database
+                        </div>
+                        <!-- ************************** -->
+                        <!-- ************************** -->
+
+                        <div class="panel-body">
+                            <div style="height: 60%; overflow:auto;">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                        <thead>
+                                            <tr>
+                                                <th>Contracts</th>
+                                                <th>Term</th>
+                                                <th>View</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        <tr ng-repeat="item in search_results | filterTermAndAgreement:search_term:glossary_agreement_item">
+                                                <td>
+                                                    {{item.NctcAgreementName}} | {{item.AgreementId}}
+                                                </td>
+                                                <td>
+                                                    {{item.GlossaryTerm}}
+                                                </td>
+                                                <td>
+                                                <a href="#" class="btn btn-success" ng-click="getGlossaryResult(item.AgreementGlossaryOfTermsId)">view</a> {{item.AgreementGlossaryOfTermsId}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+</div>
+
+
+
+ <!-- here is where we need to show an array of 'displayResultText's, selected from
+ interactions with left panels - ng-repeat of array items, not using table rows - TH  -->
+
+
+                    <!--div class="panel panel-default" style="padding: 10px; overflow:auto;">
+                        <h1>Results: {{ displayResultTitle }} </h1>
+                        <br />
+                        <div ng:bind-html="displayResultText"></div>
+                    </div-->
+
+
+                <div class="col-md-6 col-sm-6">
+                    <a href="#" class="btn btn-success" ng-click="clearArray()">Clear All</a>
+                    <!--div  ng-repeat="r in rightColArray"-->
+      <div  ng-repeat="(key,r) in rightColArray">
+                        <div class="panel panel-default" style="padding: 10px; overflow:auto;" >
+                            <h1  ng-bind-html="r.type"></h1>
+                            <p  ng-bind-html="r.NctcAgreementName"> </p>
+                            <p  ng-bind-html="r.GlossaryTerm"> </p>
+                            <p  ng-bind-html="r.Definition"> </p>
+                            <p  ng-bind-html="r.Location"> </p>
+
+                            <a href="#" class="btn btn-success" ng-click="removeElement(r.id)">remove</a>
+
+                            ID = {{r.id }} <BR>
+                            NG-repeat index (actual display index) = {{ $index }}<BR>
+                            array key (actual $scope.rightColArray index) =  {{ key }}  <BR>
+                             <a href="#" class="btn btn-success" ng-click="moveElementUp(key)">move up one</a>   &nbsp;  <a href="#" class="btn btn-success" ng-click="moveElementDown(key)">move down one</a>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+    <!-- script block -->
+    <script src="contractApp.js"></script>
+    <script src="glossaryCtrl.js"></script>
+    <!-- end of script block -->
+</body>
+</html>
+<!-- http://angularjs-workspace-mryandunnco.c9.io/contract-database/example.html -->
