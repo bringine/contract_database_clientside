@@ -1,79 +1,23 @@
 app.filter('filterTermAndNetworkCategory', function () {
-    return function (items, netsearch_term, netcategory) {
-        if(items == null)
-        {
-            console.log('items is null so do nothing');
-        }else{
-            var filtered = [];
-       //     console.log('netsearch_term: ' + netsearch_term);
-           //console.log('category_id: ' + category[0].categoryId);
-
-            // if both search_term and category
-            if((netsearch_term.length > 3) &&
-                (netcategory !== null && netcategory !== undefined)){
-                for (var i=0; i < items.length; i++) {
-                    var item = items[i];
-                    //console.log(JSON.stringify(item, null, 4));
-                    var c_name = item.category.toLowerCase();
-                    if(
-                        (item.categoryId == netcategory.categoryId) &&
-                        (c_name.indexOf(netsearch_term.toLowerCase()) > -1)
-                        )
-                    {
-                        filtered.push(item);
-                    }
-                }
-            }else{
-                // if just search_term
-                if(netsearch_term.length > 3){
-                    for (var i=0; i < items.length; i++) {
-                        var item = items[i];
-                        var c_name = item.category.toLowerCase();
-                        if(c_name.indexOf(netsearch_term.toLowerCase()) > -1){
-                            filtered.push(item);
-                        }
-                    }
-                }else{
-                    // if just category
-                    if(netcategory !== null && netcategory !== undefined){
-                        for (var i=0; i < items.length; i++) {
-                            var item = items[i];
-                            var c_name = item.category.toLowerCase();
-                            if(item.categoryId == netcategory.categoryId)
-                            {
-                                filtered.push(item);
-                            }
-                        }
-                    }else{ // if nothing at all then show everything
-                        for (var i=0; i < items.length; i++) {
-                            var item = items[i];
-                            filtered.push(item);
-                        }
-                    }
-                }
-            }
-
-            return filtered;
-        }
-    };
-});
-
-
-// review this post and see if it will adapt - http://stackoverflow.com/questions/8809425/search-multi-dimensional-array-javascript
-
-
-app.filter('filterCategoryAndSubcategory', function () {
     return function (items, netsearch_term, netcategory, netsubcategory) {
         if(items == null)
         {
             console.log('items is null so do nothing');
         }else{
             var filtered = [];
-            console.log('netsearch_term|netcategory|netsubcategory ',netsearch_term +'|'+ netcategory +'|'+ netsubcategory);
-           //console.log('category_id: ' + category[0].categoryId);
+
+        //    console.log('netsubcategory',netsubcategory);
 
 
-// here is the issue - how to manage four possible conditions, all possible permutations..?
+            // ok, if netsubcategory exists, it will have categoryId and subcategoryID, so we can use only that object, not netcategory....
+
+
+       //     if(netsubcategory !== null && netsubcategory !== undefined){
+       //                 netcategory=netsubcategory;
+       //             }
+
+
+
 
 
             // if both search_term and category
@@ -82,7 +26,8 @@ app.filter('filterCategoryAndSubcategory', function () {
                 for (var i=0; i < items.length; i++) {
                     var item = items[i];
                     //console.log(JSON.stringify(item, null, 4));
-                    var c_name = item.category.toLowerCase();
+                    var c_name = item.network.toLowerCase();
+           // console.log('c_name.indexOf(netsearch_term.toLowerCase())',c_name.indexOf(netsearch_term.toLowerCase()));
                     if(
                         (item.categoryId == netcategory.categoryId) &&
                         (c_name.indexOf(netsearch_term.toLowerCase()) > -1)
@@ -96,12 +41,14 @@ app.filter('filterCategoryAndSubcategory', function () {
                 if(netsearch_term.length > 3){
                     for (var i=0; i < items.length; i++) {
                         var item = items[i];
-                        var c_name = item.category.toLowerCase();
+                        var c_name = item.network.toLowerCase();
                         if(c_name.indexOf(netsearch_term.toLowerCase()) > -1){
                             filtered.push(item);
                         }
                     }
                 }else{
+
+
                     // if just category
                     if(netcategory !== null && netcategory !== undefined){
                         for (var i=0; i < items.length; i++) {
@@ -121,10 +68,36 @@ app.filter('filterCategoryAndSubcategory', function () {
                 }
             }
 
-            return filtered;
+    // check to see if subcategory exists - then filter current 'filtered' to show only those that match...
+                      if(netsubcategory !== null && netsubcategory !== undefined){
+
+ console.log('filtered.length', filtered.length);
+
+                        subfiltered =[];
+                          for (var i=0; i < filtered.length; i++) {
+                             var subitem = filtered[i];
+
+                           //   console.log('subitem.subcategory', subitem.subcategory);
+                           //   console.log('netsubcategory.netsubcategory', netsubcategory.subcategory);
+
+                             if(subitem.subcategory == netsubcategory.subcategory)
+                                {
+                                    subfiltered.push(subitem);
+                                     console.log('subitem.subcategory[0]', subitem.subcategory);
+                                }
+                           }
+                            return subfiltered;
+                        }else{
+                         return filtered;
+                        }
+
+
+
+
         }
     };
 });
+
 
 //*****************************************************************************************************************//
 
