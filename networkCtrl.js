@@ -5,23 +5,8 @@ app.filter('filterTermAndNetworkCategory', function () {
             console.log('items is null so do nothing');
         }else{
             var filtered = [];
-
-        //    console.log('netsubcategory',netsubcategory);
-
-
-            // ok, if netsubcategory exists, it will have categoryId and subcategoryID, so we can use only that object, not netcategory....
-
-
-       //     if(netsubcategory !== null && netsubcategory !== undefined){
-       //                 netcategory=netsubcategory;
-       //             }
-
-
-
-
-
             // if both search_term and category
-            if((netsearch_term.length > 3) &&
+            if((netsearch_term.length > 1) &&
                 (netcategory !== null && netcategory !== undefined)){
                 for (var i=0; i < items.length; i++) {
                     var item = items[i];
@@ -38,7 +23,7 @@ app.filter('filterTermAndNetworkCategory', function () {
                 }
             }else{
                 // if just search_term
-                if(netsearch_term.length > 3){
+                if(netsearch_term.length > 1){
                     for (var i=0; i < items.length; i++) {
                         var item = items[i];
                         var c_name = item.network.toLowerCase();
@@ -47,8 +32,6 @@ app.filter('filterTermAndNetworkCategory', function () {
                         }
                     }
                 }else{
-
-
                     // if just category
                     if(netcategory !== null && netcategory !== undefined){
                         for (var i=0; i < items.length; i++) {
@@ -70,16 +53,12 @@ app.filter('filterTermAndNetworkCategory', function () {
 
     // check to see if subcategory exists - then filter current 'filtered' to show only those that match...
                       if(netsubcategory !== null && netsubcategory !== undefined){
-
- console.log('filtered.length', filtered.length);
-
+                            // console.log('filtered.length', filtered.length);
                         subfiltered =[];
                           for (var i=0; i < filtered.length; i++) {
                              var subitem = filtered[i];
-
                            //   console.log('subitem.subcategory', subitem.subcategory);
                            //   console.log('netsubcategory.netsubcategory', netsubcategory.subcategory);
-
                              if(subitem.subcategory == netsubcategory.subcategory)
                                 {
                                     subfiltered.push(subitem);
@@ -90,14 +69,9 @@ app.filter('filterTermAndNetworkCategory', function () {
                         }else{
                          return filtered;
                         }
-
-
-
-
         }
     };
 });
-
 
 //*****************************************************************************************************************//
 
@@ -143,14 +117,12 @@ app.controller("contractdbCtrl", function($scope, $http) {
 
     $scope.getnetCategories  = function() {
        var url = 'http://10.5.1.25:4000/api/bulkcalcs/networkCategory';
-
        $scope.displayResult = "got something there";
         $http.post(url).
             success(function(data, status, headers, config) {
                 $scope.netcategories = data.data;
                 $scope.netcategories =
                     $scope.netcategories.sort(function(a, b){
-
                     var nameA=a.category.toLowerCase();
                     var nameB=b.category.toLowerCase();
                      if (nameA < nameB) //sort string ascending
@@ -162,23 +134,17 @@ app.controller("contractdbCtrl", function($scope, $http) {
             }).
             error(function(data, status, headers, config) {
                 console.log('Error Occured.' + data);
-
             });
     };
 
-
     $scope.getnetSubCategories  = function(ci) {
-      // var url = 'http://10.5.1.25:4000/api/contract_databases/getContracts';
          var url = 'http://10.5.1.25:4000/api/bulkcalcs/networkSubCategory';
-
        $scope.displayResult = "got something there";
         $http.post(url).
             success(function(data, status, headers, config) {
                 $scope.netsubcategories = data.data;
-
                 $scope.netsubcategories =
                     $scope.netsubcategories.sort(function(g, h){
-
                     var nameG=g.subcategory.toLowerCase();
                     var nameH=h.subcategory.toLowerCase();
                      if (nameG < nameH) //sort string ascending
@@ -187,7 +153,6 @@ app.controller("contractdbCtrl", function($scope, $http) {
                      {  return 1; }
                      return 0; //default return value (no sorting)
                 });
-
                   if(ci !== null && ci !== undefined){
                        filteredsubs = [];
                         for (var i=0; i < $scope.netsubcategories.length; i++) {
@@ -204,12 +169,7 @@ app.controller("contractdbCtrl", function($scope, $http) {
             });
     };
 
-
-
-
     $scope.getnetContracts = function() {
-       //var url = 'http://10.5.1.25:4000/api/contract_databases/getContracts';
-        //var url = 'http://10.5.1.201:4000/api/bulkcalcs/networkGrid';
        var url = 'http://10.5.1.25:4000/api/bulkcalcs/networkGrid';
        $scope.showLoader = true;
        $http.post(url).
@@ -224,12 +184,7 @@ app.controller("contractdbCtrl", function($scope, $http) {
             });
     };
 
-
-
-
-
     $scope.getNetworkResult = function (t,i,cL,ctL,sctL) {
-      //  console.log('t,i,cL,ctL,sctL ', t,i,cL,ctL,sctL);
                                     var strtype="";
                                     strtype += "" + cL + " Contract<br \/>";
                                     strtype += "Category: " + ctL + " <br \/>";
@@ -276,7 +231,6 @@ app.controller("contractdbCtrl", function($scope, $http) {
                     break;
             case 2:   //categoryId= 2 (rate calculation)
                 //use subcategoryId for ProgrammerRateCalculationId on http://10.5.1.25:4000/api/bulkcalcs/networkDetailRateCalculation
-
                           var url = 'http://10.5.1.25:4000/api/bulkcalcs/networkDetailRateCalculation';
                            $scope.showLoader = true;
                            //post_vars =
@@ -357,149 +311,124 @@ app.controller("contractdbCtrl", function($scope, $http) {
 
 
 
-
-
-
-
-
-
-
-
-
- $scope.removeElement = function (index) {
-     // works to remove the first one with that id, if id unique, then it'll work perfectly...
-     console.log('index/key passed in: ', index);
-        $scope.rightColArray.splice(index, 1 );
- };
-
-
-
- $scope.clearArray = function () {
-     // works to clear entire rightColArray
-
-             $scope.rightColArray.length=0;
- };
-
-
-
-
-
-// need to adapt this one to look at a particular value in the array, and compare to
-// other values - needs to come out of api with this unique value...
-function eliminateDuplicates(arr) {
-    var i;
-    var len = arr.length;
-    var out = [];
-    var obj = {};
-
-    for (i = 0; i < len; i++) {
-
-        if (!obj[arr[i]])
-
-        {
-
-            obj[arr[i]] = {};
-
-            out.push(arr[i]);
-
-        }
-
-    }
- //console.log(' out arr =  ', out );
-    return out;
-};
-
-
-
-$scope.moveElementUp = function (indexFrom) {
-     var indexTo;
-     indexTo = indexFrom-1;
-     if(indexFrom!==0) {    // won't allow to add empty element by pushing up button on first element
-                  console.log(' indexFrom ',  indexFrom);
-                  console.log(' indexTo: ',  indexTo);
-        targetElement = $scope.rightColArray[indexFrom];
-        magicIncrement = (indexTo - indexFrom) / Math.abs (indexTo - indexFrom);
-
-        for (Element = indexFrom; Element != indexTo; Element += magicIncrement){
-            $scope.rightColArray[Element] = $scope.rightColArray[Element + magicIncrement];
-        }
-
-        $scope.rightColArray[indexTo] = targetElement;
-
-     };
-};
-
-
- $scope.moveElementDown = function (indexFrom) {
-     var indexTo;
-     indexTo = indexFrom+1;
-     if(indexTo!==$scope.rightColArray.length) {    // won't allow to add empty element by pushing down button on last element
-
-                  console.log(' indexFrom ',  indexFrom);
-                  console.log(' indexTo: ',  indexTo);
-                  console.log(' $scope.rightColArray.length = ', $scope.rightColArray.length );
-        targetElement = $scope.rightColArray[indexFrom];
-        magicIncrement = (indexTo - indexFrom) / Math.abs (indexTo - indexFrom);
-
-        for (Element = indexFrom; Element != indexTo; Element += magicIncrement){
-            $scope.rightColArray[Element] = $scope.rightColArray[Element + magicIncrement];
-        }
-
-        $scope.rightColArray[indexTo] = targetElement;
-
+     $scope.removeElement = function (index) {
+         // works to remove the first one with that id, if id unique, then it'll work perfectly...
+         console.log('index/key passed in: ', index);
+            $scope.rightColArray.splice(index, 1 );
      };
 
-};
+     $scope.clearArray = function () {
+         // works to clear entire rightColArray
+
+                 $scope.rightColArray.length=0;
+     };
+
+    // need to adapt this one to look at a particular value in the array, and compare to
+    // other values - needs to come out of api with this unique value...
+    function eliminateDuplicates(arr) {
+        var i;
+        var len = arr.length;
+        var out = [];
+        var obj = {};
+
+        for (i = 0; i < len; i++) {
+
+            if (!obj[arr[i]])
+
+            {
+
+                obj[arr[i]] = {};
+
+                out.push(arr[i]);
+
+            }
+
+        }
+     //console.log(' out arr =  ', out );
+        return out;
+    };
+
+    $scope.moveElementUp = function (indexFrom) {
+         var indexTo;
+         indexTo = indexFrom-1;
+         if(indexFrom!==0) {    // won't allow to add empty element by pushing up button on first element
+                      console.log(' indexFrom ',  indexFrom);
+                      console.log(' indexTo: ',  indexTo);
+            targetElement = $scope.rightColArray[indexFrom];
+            magicIncrement = (indexTo - indexFrom) / Math.abs (indexTo - indexFrom);
+
+            for (Element = indexFrom; Element != indexTo; Element += magicIncrement){
+                $scope.rightColArray[Element] = $scope.rightColArray[Element + magicIncrement];
+            }
+
+            $scope.rightColArray[indexTo] = targetElement;
+
+         };
+    };
+
+     $scope.moveElementDown = function (indexFrom) {
+         var indexTo;
+         indexTo = indexFrom+1;
+         if(indexTo!==$scope.rightColArray.length) {    // won't allow to add empty element by pushing down button on last element
+
+                      console.log(' indexFrom ',  indexFrom);
+                      console.log(' indexTo: ',  indexTo);
+                      console.log(' $scope.rightColArray.length = ', $scope.rightColArray.length );
+            targetElement = $scope.rightColArray[indexFrom];
+            magicIncrement = (indexTo - indexFrom) / Math.abs (indexTo - indexFrom);
+
+            for (Element = indexFrom; Element != indexTo; Element += magicIncrement){
+                $scope.rightColArray[Element] = $scope.rightColArray[Element + magicIncrement];
+            }
+
+            $scope.rightColArray[indexTo] = targetElement;
+
+         };
+
+    };
+
+        // superfluous for this project so far...
+     $scope.removeElementByID = function (id) {
+         // works to remove the first one with that id, if id unique, then it'll work perfectly...
+         console.log('id passed in: ', id);
+
+         for (var i = 0; i < $scope.rightColArray.length; i++)
+             if ($scope.rightColArray[i].id && $scope.rightColArray[i].id === id) {
+                 $scope.rightColArray.splice(i, 1);
+                 break;
+             }
+     };
 
 
 
 
+    Array.prototype.moveUp = function(value, by) {
+        var index = this.indexOf(value),
+            newPos = index - (by || 1);
 
+        if(index === -1)
+            throw new Error('Element not found in array');
 
+        if(newPos < 0)
+            newPos = 0;
 
+        this.splice(index,1);
+        this.splice(newPos,0,value);
+    };
 
-    // superfluous for this project so far...
- $scope.removeElementByID = function (id) {
-     // works to remove the first one with that id, if id unique, then it'll work perfectly...
-     console.log('id passed in: ', id);
+    Array.prototype.moveDown = function(value, by) {
+        var index = this.indexOf(value),
+            newPos = index + (by || 1);
 
-     for (var i = 0; i < $scope.rightColArray.length; i++)
-         if ($scope.rightColArray[i].id && $scope.rightColArray[i].id === id) {
-             $scope.rightColArray.splice(i, 1);
-             break;
-         }
- };
+        if(index === -1)
+            throw new Error('Element not found in array');
 
+        if(newPos >= this.length)
+            newPos = this.length;
 
-
-
-Array.prototype.moveUp = function(value, by) {
-    var index = this.indexOf(value),
-        newPos = index - (by || 1);
-
-    if(index === -1)
-        throw new Error('Element not found in array');
-
-    if(newPos < 0)
-        newPos = 0;
-
-    this.splice(index,1);
-    this.splice(newPos,0,value);
-};
-
-Array.prototype.moveDown = function(value, by) {
-    var index = this.indexOf(value),
-        newPos = index + (by || 1);
-
-    if(index === -1)
-        throw new Error('Element not found in array');
-
-    if(newPos >= this.length)
-        newPos = this.length;
-
-    this.splice(index, 1);
-    this.splice(newPos,0,value);
-};
+        this.splice(index, 1);
+        this.splice(newPos,0,value);
+    };
 
 
     $scope.numericComparator = function(expected, actual){

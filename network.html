@@ -70,7 +70,6 @@
                             </select>
                         </div>
 
-
                                                         <!-- ********************************************************** -->
                                                         <div class="form-group input-group">
                                                             <span class="input-group-addon">Subcategories</span>
@@ -101,8 +100,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-
-        <!-- tr ng-repeat="item in netsearch_results | filterTermAndNetworkCategory:netsearch_term:netcategory_item" -->
                                         <tr ng-repeat="item in netsearch_results | filterTermAndNetworkCategory:netsearch_term:netcategory_item:netsubcategory_item">
                                                 <td>
                                                       {{item.network}}

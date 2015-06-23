@@ -18,7 +18,7 @@ app.filter('filterTermAndCategory', function () {
             //console.log('category_id: ' + category.lookup_section_categoriesid);
 
             // if both search_term and category
-            if((search_term.length > 3) &&
+            if((search_term.length > 1) &&
                 (category !== null && category !== undefined)){
                 for (var i=0; i < items.length; i++) {
                     var item = items[i];
@@ -37,7 +37,7 @@ app.filter('filterTermAndCategory', function () {
                 }
             }else{
                 // if just search_term
-                if(search_term.length > 3){
+                if(search_term.length > 1){
                     for (var i=0; i < items.length; i++) {
                         var item = items[i];
                         var c_name = item.contract_name.toLowerCase();
@@ -235,12 +235,8 @@ app.controller("contractdbCtrl", function($scope, $http) {
             });
     };
 
-
-
-
     $scope.getResult = function (t, i) {
        var url = 'http://10.5.1.25:4000/api/contract_databases/getResults';
-       //var url = 'http://10.5.1.201:4000/api/contract_databases/getResults';
        $scope.showLoader = true;
        //post_vars =
        $http.post(url, {
@@ -254,16 +250,11 @@ app.controller("contractdbCtrl", function($scope, $http) {
            /////console.log('$scope.results[0].type', scope.results[0].type);
            console.log('$scope.results[0].id  ', $scope.results[0].id);
            console.log('$scope.results[0].display_id  ', $scope.results[0].display_id);
-
            //      $scope.rightColArray.splice(0, 0,$scope.results);
            //    //        $scope.rightColArray = $scope.rightColArray[0];
-
-
            $scope.rightColArray.splice(0, 0, $scope.results[0]);
-
            // below clearly not working, needs to have a unique value in the api returned array!  DO LATER... display_id possible?
            $scope.rightColArray == eliminateDuplicates($scope.rightColArray);
-
            $scope.displayResultText = $scope.results[0].description;
            $scope.displayResultTitle = $scope.results[0].type;;
            $scope.showLoader = false;

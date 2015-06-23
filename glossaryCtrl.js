@@ -1,5 +1,5 @@
-app.filter('filterTermAndAgreement', function () {
-    return function (items, search_term, agreement) {
+app.filter('filterGlossaryTermAndAgreement', function () {
+    return function (items, gloss_search_term, agreement) {
         if(items == null)
         {
             console.log('items is null so do nothing');
@@ -7,42 +7,32 @@ app.filter('filterTermAndAgreement', function () {
             var filtered = [];
          //   console.log('search_term: ' + search_term);
           //  console.log('agreement_id: ' + agreement.lookup_section_categoriesid);
-
-
-
-
-           console.log('search_term.toLowerCase(): ' + search_term.toLowerCase());
-           console.log('agreement: ' + agreement);
-
-
-
+           //console.log('search_term.toLowerCase(): ' + search_term.toLowerCase());
+           //console.log('agreement: ' + agreement);
 
             // if both search_term and category
-            if((search_term.length > 2) &&
+            if((gloss_search_term.length > 1) &&
                 (agreement !== null && agreement !== undefined)){
                 for (var i=0; i < items.length; i++) {
                     var item = items[i];
-    //    console.log("stringify - " + JSON.stringify(item, null, 4));
+                  //    console.log("stringify - " + JSON.stringify(item, null, 4));
+                  if (item.GlossaryTerm !== null) { // th4
 
-                    if(item.GlossaryTerm !== null){    // th4
+                      var c_name = item.GlossaryTerm.toLowerCase();
+                    //  console.log('c_name : ' + c_name);
+                    //  console.log('c_name.indexOf: ' + c_name.indexOf);
+                      if (
+                          (item.AgreementId == agreement.AgreementId) &&
+                          (c_name.indexOf(gloss_search_term.toLowerCase()) > -1)
+                      ) {
+                          filtered.push(item);
+                      }
 
-                    var c_name = item.GlossaryTerm.toLowerCase();
-                                                console.log('c_name : ' + c_name );
-                                                console.log('c_name.indexOf: ' + c_name.indexOf);
-                    if(
-                        (item.AgreementId == agreement.AgreementId) &&
-                        (c_name.indexOf(search_term.toLowerCase()) > -1)
-                        )
-                    {
-                        filtered.push(item);
-                    }
-
-                    }  // th4
-
+                  } // th4
                 }
             }else{
                 // if just search_term
-                if(search_term.length > 2){
+                if(gloss_search_term.length > 1){
                     for (var i=0; i < items.length; i++) {
                         var item = items[i];
 
@@ -50,8 +40,8 @@ app.filter('filterTermAndAgreement', function () {
 
                                 var c_name = item.GlossaryTerm.toLowerCase();       // there doesn't appear to be anything here...
                    console.log('item.GlossaryTerm.toLowerCase(): ' + item.GlossaryTerm.toLowerCase());
-                 //  console.log('c_name.indexOf(search_term.toLowerCase()): ' + c_name.indexOf(search_term.toLowerCase()));
-                                if(c_name.indexOf(search_term.toLowerCase()) > -1){
+                 //  console.log('c_name.indexOf(gloss_search_term.toLowerCase()): ' + c_name.indexOf(gloss_search_term.toLowerCase()));
+                                if(c_name.indexOf(gloss_search_term.toLowerCase()) > -1){
                                     filtered.push(item);
 
                             }  // th4
@@ -87,7 +77,6 @@ app.filter('filterTermAndAgreement', function () {
                     }
                 }
             }
-
             return filtered;
         }
     };
@@ -106,6 +95,9 @@ app.controller("glossaryCtrl", function($scope, $http) {
     $scope.rightColArray =[];
 
 
+    $scope.gloss_search_results = [];
+    $scope.glossresults = [];
+
 
     $scope.filterAgreements = function (){
         console.log('going to filter glossary categories');
@@ -117,15 +109,13 @@ app.controller("glossaryCtrl", function($scope, $http) {
 
 
     $scope.getGlossary = function() {
-       //var url = 'http://private-mryandunnco.c9.io/api/contract_database_objects/test';
-//       var url = 'http://10.5.1.25:3000/api/contractdbs/getContracts';
        var url = 'http://10.5.1.25:4000/api/bulkcalcs/glossaryTermsGrid';
        $scope.showLoader = true;
        $http.post(url).
             success(function(data, status, headers, config) {
-                $scope.search_results = data.data;
+                $scope.gloss_search_results = data.data;
                 $scope.showLoader = false;
-                //console.log('got results back! %d', $scope.search_results.length);
+                //console.log('got results back! %d', $scope.gloss_search_results.length);
             }).
             error(function(data, status, headers, config) {
                 console.log('Error Occured.' + data);
@@ -134,9 +124,7 @@ app.controller("glossaryCtrl", function($scope, $http) {
     };
 
     $scope.getAgreements  = function() {
-      // var url = 'http://10.5.1.25:4000/api/contract_databases/getContracts';
-       var url = 'http://10.5.1.25:4000/api/bulkcalcs/glossaryTermsGrid';
-
+        var url = 'http://10.5.1.25:4000/api/bulkcalcs/glossaryContractsWithTerms';
        $scope.displayResult = "got something there";
         $http.post(url).
             success(function(data, status, headers, config) {
@@ -144,16 +132,12 @@ app.controller("glossaryCtrl", function($scope, $http) {
                 // console.log('$scope.agreements = ' + $scope.agreements);
                          var blank_obj =
                             {
-                  //              "AgreementGlossaryOfTermsId": 0,
                                "AgreementId": 0,
-                                 "NctcAgreementName": "- Not Selected - ",
-                  //              "Glossary_Term": "",
+                               "NctcAgreementName": "- Not Selected - ",
                             };
                        $scope.agreements.push(blank_obj);
-                        // points.sort(function(a, b){return a-b});
                         $scope.agreements =
                             $scope.agreements.sort(function(c, d){
-
                             var nameC=c.NctcAgreementName.toLowerCase();
                             var nameD=d.NctcAgreementName.toLowerCase();
                              if (nameC < nameD) //sort string ascending
@@ -165,14 +149,12 @@ app.controller("glossaryCtrl", function($scope, $http) {
                     }).
                     error(function(data, status, headers, config) {
                         console.log('Error Occurred.' + data);
-
                     });
             };
 
     $scope.getGlossaryResult = function (i) {
-    //   var url = 'http://10.5.1.25:3000/api/contractdbs/getResults';
        var url = 'http://10.5.1.25:4000/api/bulkcalcs/glossaryDetailTerms';
-//returns NctcAgreementName, GlossaryTerm, Definition, Location for a given AgreementGlossaryOfTermsId
+        //returns NctcAgreementName, GlossaryTerm, Definition, Location for a given AgreementGlossaryOfTermsId
            console.log('function i value = ' +i );
        $scope.showLoader = true;
        //post_vars =
@@ -180,38 +162,27 @@ app.controller("glossaryCtrl", function($scope, $http) {
            AgreementGlossaryOfTermsId: i
        }).
        success(function (data, status, headers, config) {
-           $scope.results = data.data;
+           $scope.glossresults = data.data;
+                                    var strGtype="";
+                                    strGtype += "<p><b>" + $scope.glossresults[0].GlossaryTerm + "<\/b> - Glossary Term<br \/> ";
+                                    strGtype += "Contract: " + $scope.glossresults[0].NctcAgreementName + " <\/p> ";
+                                    var strGdesc="";
+                                    strGdesc += "<p><b>" + $scope.glossresults[0].GlossaryTerm + "<\/b><br \/> ";
+                                    strGdesc += "" + $scope.glossresults[0].Definition + "<\/p> ";
+                                    strGdesc += "<p><b>Location:<\/b>" + $scope.glossresults[0].Location + "<\/p>";
+                                    $scope.tempGresults = [];
+                                    $scope.tempGresults = {type:strGtype, description:strGdesc};
 
-
-           $scope.rightColArray.splice(0, 0, $scope.results[0]);
-
+           $scope.rightColArray.splice(0, 0, $scope.tempGresults);
            // below clearly not working, needs to have a unique value in the api returned array!
            $scope.rightColArray == eliminateDuplicates($scope.rightColArray);
-
-
            $scope.showLoader = false;
-
-
        }).
        error(function (data, status, headers, config) {
            console.log('Error Occured.' + data);
            $scope.showLoader = false;
        });
    };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -369,7 +340,7 @@ Array.prototype.moveDown = function(value, by) {
   //*     $scope.getCategories();
         $scope.getAgreements();
         $scope.getGlossary();
-        $scope.search_term = '';
+        $scope.gloss_search_term = '';
 
   //*      $scope.getNetworks();
     };
