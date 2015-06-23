@@ -120,26 +120,39 @@
 
 
                 <div class="col-md-6 col-sm-6">
-                    <a href="#" class="btn btn-success" ng-click="clearArray()">Clear All</a>
+                    <h4><a href="#" class="label label-success" ng-click="clearArray()">Clear All</a></h4>
                     <!--div  ng-repeat="r in rightColArray"-->
       <div  ng-repeat="(key,r) in rightColArray">
+
+<div ng-init="display=true">
                         <div class="panel panel-default" style="padding: 10px; overflow:auto;" >
-                            <h1  ng-bind-html="r.type"></h1>
-                           <div><p  ng-bind-html="r.description"> </p></div>
+
+        <label >
+          <a href="" ng-show="!display" ng-click="key=!display" class="label label-success">+</a>
+          <a href="" ng-show="display" ng-click="key=!display" contenteditable=""class="label label-success">-</a>
+            <a href="" ng-click="display=!display" class="label label-success"><i>display</i></a>
+        </label>
+
+<!--span class="label label-primary">Contracts Label</span>
+
+<span class="label label-success">Glossary Label</span>
+
+<span class="label label-warning">Networks Label</span-->
+
+
+                            <p ng-bind-html="r.type"></p>
+
+                           <div ng-show="display"><p  ng-bind-html="r.description"> </p></div>
 
 
 
-                            <!--p  ng-bind-html="r.NctcAgreementName"> </p>
-                            <p  ng-bind-html="r.GlossaryTerm"> </p>
-                            <p  ng-bind-html="r.Definition"> </p>
-                            <p  ng-bind-html="r.Location"> </p-->
-                            <a href="#" class="btn btn-success" ng-click="removeElement(key)">remove</a>
-                        <!--     ID = {{r.DisplayId }} <BR>
-                            last index =  {{ r.lastIndexOf(key) }}  <BR>
-                            NG-repeat index (actual display index) = {{ $index }}<BR-->
-                             <a href="#" class="btn btn-success" ng-click="moveElementUp(key)">move up one</a>   &nbsp;
-                            <a href="#" class="btn btn-success" ng-click="moveElementDown(key)">move down one</a>
+                            <a href="#" class="label label-success" ng-click="removeElement(key)">remove</a>
+                             <a href="#" class="label label-success" ng-click="moveElementUp(key)">move up one</a>   &nbsp;
+                            <a href="#" class="label label-success" ng-click="moveElementDown(key)">move down one</a>
+
+
                         </div>
+   </div> <!-- ng-init -->
                     </div>
 
                 </div>

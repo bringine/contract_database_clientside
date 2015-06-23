@@ -765,16 +765,15 @@ app.controller("contractdbCtrl", function($scope, $http) {
 
 
 
-
 // *  RIGHT COLUMN CONTROLS - START * //
 
-         $scope.removeElement = function (index) {
+        $scope.removeElement = function (index) {
              // works to remove the first one with that id, if id unique, then it'll work perfectly...
              console.log('index/key passed in: ', index);
                 $scope.rightColArray.splice(index, 1 );
          };
 
-         $scope.clearArray = function () {
+        $scope.clearArray = function () {
              // works to clear entire rightColArray
 
                      $scope.rightColArray.length=0;
@@ -823,8 +822,7 @@ app.controller("contractdbCtrl", function($scope, $http) {
              };
         };
 
-
-         $scope.moveElementDown = function (indexFrom) {
+        $scope.moveElementDown = function (indexFrom) {
              var indexTo;
              indexTo = indexFrom+1;
              if(indexTo!==$scope.rightColArray.length) {    // won't allow to add empty element by pushing down button on last element
@@ -846,7 +844,7 @@ app.controller("contractdbCtrl", function($scope, $http) {
         };
 
             // superfluous for this project so far...
-         $scope.removeElementByID = function (id) {
+        $scope.removeElementByID = function (id) {
              // works to remove the first one with that id, if id unique, then it'll work perfectly...
              console.log('id passed in: ', id);
 
@@ -888,7 +886,7 @@ app.controller("contractdbCtrl", function($scope, $http) {
 // *  RIGHT COLUMN CONTROLS - END * //
 
 
-
+// following not used -
     $scope.numericComparator = function(expected, actual){
 
         //if(expected.length > 0)
@@ -899,11 +897,6 @@ app.controller("contractdbCtrl", function($scope, $http) {
         //    return true;
     //    }
     };
-
-
-
-
-
 
 
     var init = function () {
