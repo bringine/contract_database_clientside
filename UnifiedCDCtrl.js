@@ -268,7 +268,7 @@
           self.tabs = []
           self.addTab = function addTab(tab) {
           self.tabs.push(tab)
-              if(self.tabs.length === 1) {
+              if(self.tabs.length === 2) {     // 1 sets to first tab, 2 to second, 3 to third...
                 tab.active = true
               }
             }
@@ -315,6 +315,8 @@ app.controller("contractdbCtrl", function($scope, $http) {
     $scope.glossresults = [];
 
     $scope.rightColArray =[];
+
+    $scope.rightColJson =[];
 
 
  // * CONTROLLER SECTION - SCOPE FILTERS - start * //
@@ -459,6 +461,7 @@ app.controller("contractdbCtrl", function($scope, $http) {
                $scope.rightColArray.splice(0, 0, $scope.results[0]);
                // below clearly not working, needs to have a unique value in the api returned array!  DO LATER... display_id possible?
                $scope.rightColArray == eliminateDuplicates($scope.rightColArray);
+                $scope.rightColJson = JSON.stringify($scope.rightColArray);
                $scope.displayResultText = $scope.results[0].description;
                $scope.displayResultTitle = $scope.results[0].type;;
                $scope.showLoader = false;
@@ -580,6 +583,7 @@ app.controller("contractdbCtrl", function($scope, $http) {
                                    $scope.rightColArray.splice(0, 0, $scope.tempresults);   //$scope.rightColArray.splice(0, 0, $scope.results[0]);
                                                                 //    $scope.displayResultTitle = $scope.results[0].type;;  // <b>
                                                                 //    $scope.displayResultText = $scope.results[0].description;  // <p>
+                                    $scope.rightColJson = JSON.stringify($scope.rightColArray);
                                    $scope.showLoader = false;
 
                                }).
@@ -617,6 +621,7 @@ app.controller("contractdbCtrl", function($scope, $http) {
                                         $scope.tempresults = {type:strtype, description:strdesc};
                                     //    console.log('$scope.tempresults[0] ', $scope.tempresults[0]);
                                    $scope.rightColArray.splice(0, 0, $scope.tempresults);   //$scope.rightColArray.splice(0, 0, $scope.results[0]);
+                                   $scope.rightColJson = JSON.stringify($scope.rightColArray);
                                    $scope.showLoader = false;
 
                                }).
@@ -652,6 +657,7 @@ app.controller("contractdbCtrl", function($scope, $http) {
                                         $scope.tempresults = {type:strtype, description:strdesc};
                                      //   console.log('$scope.tempresults[0] ', $scope.tempresults[0]);
                                    $scope.rightColArray.splice(0, 0, $scope.tempresults);   //$scope.rightColArray.splice(0, 0, $scope.results[0]);
+                                   $scope.rightColJson = JSON.stringify($scope.rightColArray);
                                    $scope.showLoader = false;
 
                                }).
@@ -740,12 +746,15 @@ app.controller("contractdbCtrl", function($scope, $http) {
            $scope.rightColArray.splice(0, 0, $scope.tempGresults);
            // below clearly not working, needs to have a unique value in the api returned array!
            $scope.rightColArray == eliminateDuplicates($scope.rightColArray);
+            $scope.rightColJson = JSON.stringify($scope.rightColArray);
            $scope.showLoader = false;
        }).
        error(function (data, status, headers, config) {
            console.log('Error Occured.' + data);
            $scope.showLoader = false;
        });
+
+
    };
 
 
@@ -890,6 +899,9 @@ app.controller("contractdbCtrl", function($scope, $http) {
         //    return true;
     //    }
     };
+
+
+
 
 
 
