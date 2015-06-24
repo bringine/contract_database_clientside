@@ -153,6 +153,8 @@ app.controller("contractdbCtrl", function($scope, $http) {
                      {  return 1; }
                      return 0; //default return value (no sorting)
                 });
+
+        console.log('ci = ', ci);
                   if(ci !== null && ci !== undefined){
                        filteredsubs = [];
                         for (var i=0; i < $scope.netsubcategories.length; i++) {

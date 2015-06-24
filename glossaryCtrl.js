@@ -10,6 +10,11 @@ app.filter('filterGlossaryTermAndAgreement', function () {
            //console.log('search_term.toLowerCase(): ' + search_term.toLowerCase());
            //console.log('agreement: ' + agreement);
 
+            if(agreement !== null && agreement !== undefined && agreement.AgreementId==0){
+                agreement=null;
+            }
+
+
             // if both search_term and category
             if((gloss_search_term.length > 1) &&
                 (agreement !== null && agreement !== undefined)){
@@ -77,6 +82,8 @@ app.filter('filterGlossaryTermAndAgreement', function () {
                     }
                 }
             }
+
+            // can we sort the filtered return here?
             return filtered;
         }
     };
@@ -102,6 +109,8 @@ app.controller("glossaryCtrl", function($scope, $http) {
     $scope.filterAgreements = function (){
         console.log('going to filter glossary categories');
         $scope.agreementRealFilter = $scope.glossary_agreement_item.AgreementId;
+       // if $scope.agreementRealFilter=0 ... not needed as we'll consider this condition in the app.filter('filterGlossaryTermAndAgreement'
+       // section above - to set agreement to null if we're only looking at gloss_search_term term value...
         console.log($scope.glossary_agreement_item.NctcAgreementName,
                     $scope.glossary_agreement_item.AgreementId);
     }
@@ -123,6 +132,9 @@ app.controller("glossaryCtrl", function($scope, $http) {
             });
     };
 
+
+
+
     $scope.getAgreements  = function() {
         var url = 'http://10.5.1.25:4000/api/bulkcalcs/glossaryContractsWithTerms';
        $scope.displayResult = "got something there";
@@ -131,10 +143,10 @@ app.controller("glossaryCtrl", function($scope, $http) {
                         $scope.agreements = data.data;
                 // console.log('$scope.agreements = ' + $scope.agreements);
                          var blank_obj =
-                            {
-                               "AgreementId": 0,
-                               "NctcAgreementName": "- Not Selected - ",
-                            };
+                             {
+                                "AgreementId": 0,
+                                "NctcAgreementName": " - No Selection - ",
+                             };
                        $scope.agreements.push(blank_obj);
                         $scope.agreements =
                             $scope.agreements.sort(function(c, d){
@@ -151,6 +163,10 @@ app.controller("glossaryCtrl", function($scope, $http) {
                         console.log('Error Occurred.' + data);
                     });
             };
+
+
+
+
 
     $scope.getGlossaryResult = function (i) {
        var url = 'http://10.5.1.25:4000/api/bulkcalcs/glossaryDetailTerms';

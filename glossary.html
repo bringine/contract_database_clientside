@@ -49,12 +49,6 @@
                         </div>
 
 
-                        <!--
-                        <button ng-click="getResult()" id="btnMakeCall">getResult</button>
-                        <button ng-click="getNetworks()" id="btnMakeCall">getNetworks</button>
-                        <button ng-click="getCategories()" id="btnMakeCall">getCategories</button>
-                        -->
-
       <!-- can angular only show unique valuse in this, or is it necessary to determine in the filterAgreements js function?  -->
                         <div class="form-group input-group">
                             <span class="input-group-addon">Agreements </span>
@@ -65,6 +59,10 @@
                                 ng-change="filterAgreements()">
                             </select>
                         </div>
+
+<!-- agreementRealFilter = {{ agreementRealFilter }}  -->
+
+
 
 
                         <div class="form-group input-group">
@@ -127,29 +125,22 @@
 <div ng-init="display=true">
                         <div class="panel panel-default" style="padding: 10px; overflow:auto;" >
 
-        <label >
-          <a href="" ng-show="!display" ng-click="key=!display" class="label label-success">+</a>
-          <a href="" ng-show="display" ng-click="key=!display" contenteditable=""class="label label-success">-</a>
-            <a href="" ng-click="display=!display" class="label label-success"><i>display</i></a>
-        </label>
 
-<!--span class="label label-primary">Contracts Label</span>
-
-<span class="label label-success">Glossary Label</span>
-
-<span class="label label-warning">Networks Label</span-->
 
 
                             <p ng-bind-html="r.type"></p>
 
                            <div ng-show="display"><p  ng-bind-html="r.description"> </p></div>
-
-
+  <label >
 
                             <a href="#" class="label label-success" ng-click="removeElement(key)">remove</a>
                              <a href="#" class="label label-success" ng-click="moveElementUp(key)">move up one</a>   &nbsp;
                             <a href="#" class="label label-success" ng-click="moveElementDown(key)">move down one</a>
 
+            <a href="" ng-show="display" ng-click="display=!display" class="label label-success">Collapse</a>
+
+            <a href="" ng-show="!display" ng-click="display=!display" class="label label-success">Expand</a>
+        </label>
 
                         </div>
    </div> <!-- ng-init -->

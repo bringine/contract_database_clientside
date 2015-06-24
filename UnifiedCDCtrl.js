@@ -8,12 +8,21 @@
             console.log('items is null so do nothing');
         }else{
             var filtered = [];
-              if (category !== undefined) {
-                  if (category.lookup_section_categoriesid==0) {
-                      console.log('category resets to null now - ', category.lookup_section_categoriesid);
-                       category === null;  // this is weak - how to completely empty this so that full data returns???
-                  };
-              };
+
+
+            if(category !== null && category !== undefined && category.lookup_section_categoriesid==0){
+                category===null;
+            }
+
+          //    if (category !== undefined) {
+          //        if (category.lookup_section_categoriesid==0) {
+          //            console.log('category resets to null now - ', category.lookup_section_categoriesid);
+          //             category === null;  // this is weak - how to completely empty this so that full data returns???
+          //        };
+          //    };
+
+
+
             // need to set category to null if value is 'not selected'  or lookup_section_categoriesid=0
             console.log('search_term: ' + search_term);
             //console.log('category_id: ' + category.lookup_section_categoriesid);
@@ -80,9 +89,11 @@
             console.log('items is null so do nothing');
         }else{
             var filtered = [];
+           // console.log('netsearch_term= ', netsearch_term);
+
             // if both search_term and category
             if((netsearch_term.length > 1) &&
-                (netcategory !== null && netcategory !== undefined)){
+               (netcategory !== null && netcategory !== undefined)){
                 for (var i=0; i < items.length; i++) {
                     var item = items[i];
                     //console.log(JSON.stringify(item, null, 4));
@@ -128,12 +139,12 @@
 
     // check to see if subcategory exists - then filter current 'filtered' to show only those that match...
                       if(netsubcategory !== null && netsubcategory !== undefined){
-                            // console.log('filtered.length', filtered.length);
+ //console.log('filtered.length', filtered.length);
                         subfiltered =[];
                           for (var i=0; i < filtered.length; i++) {
                              var subitem = filtered[i];
-                           //   console.log('subitem.subcategory', subitem.subcategory);
-                           //   console.log('netsubcategory.netsubcategory', netsubcategory.subcategory);
+ //console.log('subitem.subcategory', subitem.subcategory);
+ //console.log('netsubcategory.netsubcategory', netsubcategory.subcategory);
                              if(subitem.subcategory == netsubcategory.subcategory)
                                 {
                                     subfiltered.push(subitem);
@@ -157,10 +168,10 @@
             console.log('items is null so do nothing');
         }else{
             var filtered = [];
-         //   console.log('search_term: ' + search_term);
-          //  console.log('agreement_id: ' + agreement.lookup_section_categoriesid);
-           //console.log('search_term.toLowerCase(): ' + search_term.toLowerCase());
-           //console.log('agreement: ' + agreement);
+
+            if(agreement !== null && agreement !== undefined && agreement.AgreementId==0){
+                agreement=null;
+            }
 
             // if both search_term and category
             if((gloss_search_term.length > 1) &&
@@ -268,7 +279,7 @@
           self.tabs = []
           self.addTab = function addTab(tab) {
           self.tabs.push(tab)
-              if(self.tabs.length === 2) {     // 1 sets to first tab, 2 to second, 3 to third...
+              if(self.tabs.length === 1) {     // 1 sets to first tab, 2 to second, 3 to third...
                 tab.active = true
               }
             }
@@ -292,65 +303,72 @@
 //app.controller("contractCtrl", function($scope, $http) {
 app.controller("contractdbCtrl", function($scope, $http) {
 
-    $scope.search_results = [];
-    $scope.categories = [];
-    $scope.results = [];
+    $scope.contracts = [];
+    //$scope.search_results = [];
+    //$scope.categories = [];
+    //$scope.results = [];
     $scope.showLoader = false;
     $scope.displayResultText = '';
     $scope.displayResultTitle = '';
     $scope.categoryRealFilter = '';
 
-    $scope.subcategories = [];
+    //$scope.subcategories = [];
     $scope.subcategoryRealFilter = '';
     $scope.agreementRealFilter = '';
 
-    $scope.netcategories = [];
-    $scope.netsubcategories = [];
+    $scope.networks = [];
+     //  $scope.netcategories = [];
+     //  $scope.netsubcategories = [];
     $scope.netcategoryRealFilter = '';
-    $scope.netsubcategoryRealFilter = '';
-    $scope.netresults = [];
-    $scope.netsearch_results = [];
+     //  $scope.netsubcategoryRealFilter = '';
+     //  $scope.netresults = [];
+     // $scope.netsearch_results = [];
 
-    $scope.gloss_search_results = [];
-    $scope.glossresults = [];
+    $scope.glossary = [];
+   // $scope.gloss_search_results = [];
+   // $scope.glossresults = [];
 
     $scope.rightColArray =[];
-
     $scope.rightColJson =[];
 
 
  // * CONTROLLER SECTION - SCOPE FILTERS - start * //
     // ** scope filter for Contracts - start ** //
-        $scope.filterCategories = function (){
+        $scope.filterCategories = function () {
+        console.log('$scope.category_item = ' + $scope.contracts.category_item);
             console.log('going to filter contacts.');
-            $scope.categoryRealFilter = $scope.category_item.lookup_section_categoriesid;
-            console.log($scope.category_item.category_name,
-                        $scope.category_item.lookup_section_categoriesid);
+        //    if ($scope.category_item !== null && $scope.category_item !== undefined) {
+                $scope.categoryRealFilter = $scope.contracts.category_item.lookup_section_categoriesid;
+                console.log($scope.contracts.category_item.category_name,
+                    $scope.contracts.category_item.lookup_section_categoriesid);
+         //   }
         }
     // ** scope filter for Contracts - end ** //
 
     // ** scope filter for Network - start ** //
-        $scope.filternetCategories = function (){
-        console.log('going to filter contacts.');
-        $scope.netcategoryRealFilter = $scope.netcategory_item.category;  //$scope.category_item.categoryId;   //TH 6/15/2015
-         console.log('filterCategories: netcategory | netcategoryId = ', $scope.netcategory_item.category + ' | ' + $scope.netcategory_item.categoryId);
-        $scope.getnetSubCategories($scope.netcategory_item.categoryId);
+   $scope.filternetCategories = function (){
+      //  console.log('going to filter, sets $scope.networks.netcategory_item.categoryId', $scope.networks.netcategory_item.categoryId);
+        $scope.netcategoryRealFilter = $scope.contracts.networks.netcategory_item.category;  //$scope.category_item.categoryId;   //TH 6/15/2015
+      //   console.log('filterCategories: networks.netcategory | networks.netcategoryId = ', $scope.networks.netcategory_item.category + ' | ' + $scope.networks.netcategory_item.categoryId);
+         $scope.getnetSubCategories($scope.contracts.networks.netcategory_item.categoryId);
     };
 
-        $scope.filternetSubCategories = function (ci){
+
+    $scope.filternetSubCategories = function (ci){
         console.log('going to filter subcategories.', ci);
-        $scope.netsubcategoryRealFilter = $scope.netsubcategory_item.subcategory;  //$scope.category_item.categoryId;   //TH 6/15/2015
-         console.log('filterSubCategories: netsubcategory | netsubcategoryId = ',$scope.netsubcategory_item.subcategory + ' | ' + $scope.netsubcategory_item.subcategoryId);
-         console.log('filterCategories: netcategory | netcategoryId = ', $scope.netcategory_item.category + ' | ' + $scope.netcategory_item.categoryId);
+        $scope.netsubcategoryRealFilter = $scope.networks.netsubcategory_item.subcategory;  //$scope.category_item.categoryId;   //TH 6/15/2015
+          console.log('filterSubCategories: networks.netsubcategory | networks.netsubcategoryId = ',$scope.networks.netsubcategory_item.subcategory + ' | ' + $scope.networks.netsubcategory_item.subcategoryId);
+          console.log('filterCategories: networks.netcategory | networks.netcategoryId = ', $scope.networks.netcategory_item.category + ' | ' + $scope.networks.netcategory_item.categoryId);
     };
+
     // ** scope filter for Network - end ** //
 
     // ** scope filter for Glossary - start ** //
         $scope.filterAgreements = function (){
         console.log('going to filter glossary categories');
-        $scope.agreementRealFilter = $scope.glossary_agreement_item.AgreementId;
-        console.log($scope.glossary_agreement_item.NctcAgreementName,
-                    $scope.glossary_agreement_item.AgreementId);
+        $scope.agreementRealFilter = $scope.glossary.glossary_agreement_item.AgreementId;
+        console.log($scope.glossary.glossary_agreement_item.NctcAgreementName,
+                    $scope.glossary.glossary_agreement_item.AgreementId);
     }
     // ** scope filter for Glossary - end ** //
 
@@ -368,7 +386,7 @@ app.controller("contractdbCtrl", function($scope, $http) {
            $scope.showLoader = true;
            $http.post(url).
                 success(function(data, status, headers, config) {
-                    $scope.search_results = data.data;
+                    $scope.contracts.search_results = data.data;
                     $scope.showLoader = false;
                     //console.log('got results back! %d', $scope.search_results.length);
                 }).
@@ -383,17 +401,17 @@ app.controller("contractdbCtrl", function($scope, $http) {
            $scope.displayResult = "got something there";
             $http.post(url).
                 success(function(data, status, headers, config) {
-                    $scope.categories = data.data;
+                    $scope.contracts.categories = data.data;
                     var blank_obj =
                     {
                       "lookup_section_categoriesid": 0,
                       "category_name": "- Not Selected - ",
                       "category_description": ""
                     };
-                    $scope.categories.push(blank_obj);
+                    $scope.contracts.categories.push(blank_obj);
                     // points.sort(function(a, b){return a-b});
-                    $scope.categories =
-                        $scope.categories.sort(function(a, b){
+                    $scope.contracts.categories =
+                        $scope.contracts.categories.sort(function(a, b){
                         var nameA=a.category_name.toLowerCase();
                         var nameB=b.category_name.toLowerCase();
                          if (nameA < nameB) //sort string ascending
@@ -415,17 +433,17 @@ app.controller("contractdbCtrl", function($scope, $http) {
            $scope.displayResult = "got something there";
             $http.post(url).
                 success(function(data, status, headers, config) {
-                    $scope.categories = data.data;
+                    $scope.contracts.categories = data.data;
                     var blank_obj =
                     {
                       "lookup_section_categoriesid": 0,
                       "category_name": "- Not Selected - ",
                       "category_description": ""
                     };
-                    $scope.categories.push(blank_obj);
+                    $scope.contracts.categories.push(blank_obj);
                     // points.sort(function(a, b){return a-b});
-                    $scope.categories =
-                        $scope.categories.sort(function(a, b){
+                    $scope.contracts.categories =
+                        $scope.contracts.categories.sort(function(a, b){
 
                         var nameA=a.category_name.toLowerCase();
                         var nameB=b.category_name.toLowerCase();
@@ -451,19 +469,19 @@ app.controller("contractdbCtrl", function($scope, $http) {
                id: i
            }).
            success(function (data, status, headers, config) {
-               $scope.results = data.data;
+               $scope.contracts.results = data.data;
                // TH //  need to put this item into the right column display collector array...
                /////console.log('$scope.results[0].type', scope.results[0].type);
-               console.log('$scope.results[0].id  ', $scope.results[0].id);
-               console.log('$scope.results[0].display_id  ', $scope.results[0].display_id);
+               console.log('$scope.results[0].id  ', $scope.contracts.results[0].id);
+               console.log('$scope.results[0].display_id  ', $scope.contracts.results[0].display_id);
                //      $scope.rightColArray.splice(0, 0,$scope.results);
                //    //        $scope.rightColArray = $scope.rightColArray[0];
-               $scope.rightColArray.splice(0, 0, $scope.results[0]);
+               $scope.rightColArray.splice(0, 0, $scope.contracts.results[0]);
                // below clearly not working, needs to have a unique value in the api returned array!  DO LATER... display_id possible?
                $scope.rightColArray == eliminateDuplicates($scope.rightColArray);
                 $scope.rightColJson = JSON.stringify($scope.rightColArray);
-               $scope.displayResultText = $scope.results[0].description;
-               $scope.displayResultTitle = $scope.results[0].type;;
+               $scope.displayResultText = $scope.contracts.results[0].description;
+               $scope.displayResultTitle = $scope.contracts.results[0].type;;
                $scope.showLoader = false;
 
            }).
@@ -482,9 +500,9 @@ app.controller("contractdbCtrl", function($scope, $http) {
        $scope.displayResult = "got something there";
         $http.post(url).
             success(function(data, status, headers, config) {
-                $scope.netcategories = data.data;
-                $scope.netcategories =
-                    $scope.netcategories.sort(function(a, b){
+                $scope.networks.netcategories = data.data;
+                $scope.networks.netcategories =
+                    $scope.networks.netcategories.sort(function(a, b){
                     var nameA=a.category.toLowerCase();
                     var nameB=b.category.toLowerCase();
                      if (nameA < nameB) //sort string ascending
@@ -500,13 +518,17 @@ app.controller("contractdbCtrl", function($scope, $http) {
     };
 
         $scope.getnetSubCategories  = function(ci) {
+
+        console.log('ci = ', ci);
+
              var url = 'http://10.5.1.25:4000/api/bulkcalcs/networkSubCategory';
            $scope.displayResult = "got something there";
             $http.post(url).
                 success(function(data, status, headers, config) {
-                    $scope.netsubcategories = data.data;
-                    $scope.netsubcategories =
-                        $scope.netsubcategories.sort(function(g, h){
+                    $scope.networks.netsubcategories = data.data;
+
+                    $scope.networks.netsubcategories =
+                        $scope.networks.netsubcategories.sort(function(g, h){
                         var nameG=g.subcategory.toLowerCase();
                         var nameH=h.subcategory.toLowerCase();
                          if (nameG < nameH) //sort string ascending
@@ -516,14 +538,14 @@ app.controller("contractdbCtrl", function($scope, $http) {
                          return 0; //default return value (no sorting)
                     });
                       if(ci !== null && ci !== undefined){
-                           filteredsubs = [];
-                            for (var i=0; i < $scope.netsubcategories.length; i++) {
-                              if($scope.netsubcategories[i].categoryId == ci){
-                               //console.log('$scope.netsubcategories[i].categoryId = ', $scope.netsubcategories[i].categoryId);
-                                filteredsubs.push($scope.netsubcategories[i]);
+                            filteredsubs = [];
+                            for (var i=0; i < $scope.networks.netsubcategories.length; i++) {
+                              if($scope.networks.netsubcategories[i].categoryId == ci){
+                            //  console.log('$scope.networks.netsubcategories[i].categoryId = ', $scope.networks.netsubcategories[i].categoryId);
+                                 filteredsubs.push($scope.networks.netsubcategories[i]);
                                }
                              }
-                           $scope.netsubcategories = filteredsubs;
+                           $scope.networks.netsubcategories =  filteredsubs;
                         };
                 }).
                 error(function(data, status, headers, config) {
@@ -536,7 +558,7 @@ app.controller("contractdbCtrl", function($scope, $http) {
            $scope.showLoader = true;
            $http.post(url).
                 success(function(data, status, headers, config) {
-                    $scope.netsearch_results = data.data;
+                    $scope.networks.netsearch_results = data.data;
                     $scope.showLoader = false;
                     //console.log('got results back! %d', $scope.netsearch_results.length);
                 }).
@@ -562,7 +584,7 @@ app.controller("contractdbCtrl", function($scope, $http) {
                                    Programs_ParticipationRulesId: i
                                }).
                                success(function (data, status, headers, config) {
-                                   $scope.netresults = data.data;
+                                   $scope.networks.netresults = data.data;
                                         //Programs_ParticipationRulesId
                                         //ProgrammerRuleType
                                         //NCTCProgrammerCode
@@ -571,11 +593,11 @@ app.controller("contractdbCtrl", function($scope, $http) {
                                         //SystemTrigger
                                     /*  here is where we reformat Carriage returned info for display in rightCol display*/
                                         var strdesc="";
-                                        strdesc += "<p><b>Programmer Rule Type: <\/b>  " + $scope.netresults[0].ProgrammerRuleType + " <\/p> ";
-                                        strdesc += "<p><b>Programmer Code:<\/b> " + $scope.netresults[0].NCTCProgrammerCode + " <\/p> ";
-                                        strdesc += "<p><b>Description:<\/b><br \/>" + $scope.netresults[0].ObligationDescription + "<\/p> ";
-                                        strdesc += "<p><b>Contract Location:<\/b><br \/>" + $scope.netresults[0].ContractLocation + "<\/p> ";
-                                        strdesc += "<p><b>System Trigger:<\/b><br \/>" + $scope.netresults[0].SystemTrigger + "<\/p>";
+                                        strdesc += "<p><b>Programmer Rule Type: <\/b>  " + $scope.networks.netresults[0].ProgrammerRuleType + " <\/p> ";
+                                        strdesc += "<p><b>Programmer Code:<\/b> " + $scope.networks.netresults[0].NCTCProgrammerCode + " <\/p> ";
+                                        strdesc += "<p><b>Description:<\/b><br \/>" + $scope.networks.netresults[0].ObligationDescription + "<\/p> ";
+                                        strdesc += "<p><b>Contract Location:<\/b><br \/>" + $scope.networks.netresults[0].ContractLocation + "<\/p> ";
+                                        strdesc += "<p><b>System Trigger:<\/b><br \/>" + $scope.networks.netresults[0].SystemTrigger + "<\/p>";
                                  //        console.log('strdesc ', strdesc);
                                         $scope.tempresults = [];
                                         $scope.tempresults = {type:strtype, description:strdesc};
@@ -601,7 +623,7 @@ app.controller("contractdbCtrl", function($scope, $http) {
                                    ProgrammerRateCalculationId: i
                                }).
                                success(function (data, status, headers, config) {
-                                   $scope.netresults = data.data;
+                                   $scope.networks.netresults = data.data;
 
                                    // TH //  need to put this item into the right column display collector array...
                                    /////console.log('$scope.results[0].type', scope.results[0].type);
@@ -613,9 +635,9 @@ app.controller("contractdbCtrl", function($scope, $http) {
                                     /*  here is where we reformat Carriage returned info for display in rightCol display*/
                                         var strdesc="";
                                         //strdesc += "<p><b>Programmer Rate Calculation Id: <\/b>  " + $scope.results[0].ProgrammerRateCalculationId + " <\/p> ";
-                                        strdesc += "<p><b>Programmer Code:<\/b> " + $scope.netresults[0].NCTCProgrammerCode + " <\/p> ";
-                                        strdesc += "<p><b>Rate Type:<\/b><br \/>" + $scope.netresults[0].RateType + "<\/p> ";
-                                        strdesc += "<p><b>Calculation Type Description:<\/b><br \/>" + $scope.netresults[0].CalculationTypeDescription + "<\/p>";
+                                        strdesc += "<p><b>Programmer Code:<\/b> " + $scope.networks.netresults[0].NCTCProgrammerCode + " <\/p> ";
+                                        strdesc += "<p><b>Rate Type:<\/b><br \/>" + $scope.networks.netresults[0].RateType + "<\/p> ";
+                                        strdesc += "<p><b>Calculation Type Description:<\/b><br \/>" + $scope.networks.netresults[0].CalculationTypeDescription + "<\/p>";
                                    //      console.log('strdesc ', strdesc);
                                         $scope.tempresults = [];
                                         $scope.tempresults = {type:strtype, description:strdesc};
@@ -641,7 +663,7 @@ app.controller("contractdbCtrl", function($scope, $http) {
                                    ProgrammerIncentivesId: i
                                }).
                                success(function (data, status, headers, config) {
-                                   $scope.netresults = data.data;
+                                   $scope.networks.netresults = data.data;
                                   // console.log('$scope.results[0]   ', $scope.results[0] );
                                   // console.log('$scope.results[0].IncentiveType   ', $scope.results[0].IncentiveType );
                                         // ProgrammerIncentivesId
@@ -650,8 +672,8 @@ app.controller("contractdbCtrl", function($scope, $http) {
                                     /*  here is where we reformat Carriage returned info for display in rightCol display*/
                                         var strdesc="";
                                         //strdesc += "<p><b>ProgrammerIncentivesId: <\/b>  " + $scope.results[0].ProgrammerIncentivesId + " <\/p> ";
-                                        strdesc += "<p><b>Incentive Type:<\/b> " + $scope.netresults[0].IncentiveType + " <\/p> ";
-                                        strdesc += "<p><b>Incentive Details:<\/b><br \/>" + $scope.netresults[0].IncentiveDetails + "<\/p>";
+                                        strdesc += "<p><b>Incentive Type:<\/b> " + $scope.networks.netresults[0].IncentiveType + " <\/p> ";
+                                        strdesc += "<p><b>Incentive Details:<\/b><br \/>" + $scope.networks.netresults[0].IncentiveDetails + "<\/p>";
                                      //    console.log('strdesc ', strdesc);
                                         $scope.tempresults = [];
                                         $scope.tempresults = {type:strtype, description:strdesc};
@@ -683,7 +705,7 @@ app.controller("contractdbCtrl", function($scope, $http) {
        $scope.showLoader = true;
        $http.post(url).
             success(function(data, status, headers, config) {
-                $scope.gloss_search_results = data.data;
+                $scope.glossary.gloss_search_results = data.data;
                 $scope.showLoader = false;
                 //console.log('got results back! %d', $scope.gloss_search_results.length);
             }).
@@ -698,16 +720,16 @@ app.controller("contractdbCtrl", function($scope, $http) {
            $scope.displayResult = "got something there";
             $http.post(url).
                 success(function(data, status, headers, config) {
-                            $scope.agreements = data.data;
+                            $scope.glossary.agreements = data.data;
                     // console.log('$scope.agreements = ' + $scope.agreements);
                              var blank_obj =
                                 {
                                    "AgreementId": 0,
                                    "NctcAgreementName": "- Not Selected - ",
                                 };
-                           $scope.agreements.push(blank_obj);
-                            $scope.agreements =
-                                $scope.agreements.sort(function(c, d){
+                           $scope.glossary.agreements.push(blank_obj);
+                            $scope.glossary.agreements =
+                                $scope.glossary.agreements.sort(function(c, d){
                                 var nameC=c.NctcAgreementName.toLowerCase();
                                 var nameD=d.NctcAgreementName.toLowerCase();
                                  if (nameC < nameD) //sort string ascending
@@ -723,39 +745,40 @@ app.controller("contractdbCtrl", function($scope, $http) {
                 };
 
         $scope.getGlossaryResult = function (i) {
-       var url = 'http://10.5.1.25:4000/api/bulkcalcs/glossaryDetailTerms';
-        //returns NctcAgreementName, GlossaryTerm, Definition, Location for a given AgreementGlossaryOfTermsId
-           console.log('function i value = ' +i );
-       $scope.showLoader = true;
-       //post_vars =
-       $http.post(url, {
-           AgreementGlossaryOfTermsId: i
-       }).
-       success(function (data, status, headers, config) {
-           $scope.glossresults = data.data;
-                                    var strGtype="";
-                                    strGtype += "<p><b>" + $scope.glossresults[0].GlossaryTerm + "<\/b> - Glossary Term<br \/> ";
-                                    strGtype += "Contract: " + $scope.glossresults[0].NctcAgreementName + " <\/p> ";
-                                    var strGdesc="";
-                                    strGdesc += "<p><b>" + $scope.glossresults[0].GlossaryTerm + "<\/b><br \/> ";
-                                    strGdesc += "" + $scope.glossresults[0].Definition + "<\/p> ";
-                                    strGdesc += "<p><b>Location:<\/b>" + $scope.glossresults[0].Location + "<\/p>";
-                                    $scope.tempGresults = [];
-                                    $scope.tempGresults = {type:strGtype, description:strGdesc};
+            var url = 'http://10.5.1.25:4000/api/bulkcalcs/glossaryDetailTerms';
+            //returns NctcAgreementName, GlossaryTerm, Definition, Location for a given AgreementGlossaryOfTermsId
+            console.log('function i value = ' + i);
+            $scope.showLoader = true;
+            //post_vars =
+            $http.post(url, {
+                AgreementGlossaryOfTermsId: i
+            }).
+            success(function (data, status, headers, config) {
+                $scope.glossary.glossresults = data.data;
+                var strGtype = "";
+                strGtype += "<p><b>" + $scope.glossary.glossresults[0].GlossaryTerm + "<\/b> - Glossary Term<br \/> ";
+                strGtype += "Contract: " + $scope.glossary.glossresults[0].NctcAgreementName + " <\/p> ";
+                var strGdesc = "";
+                strGdesc += "<p><b>" + $scope.glossary.glossresults[0].GlossaryTerm + "<\/b><br \/> ";
+                strGdesc += "" + $scope.glossary.glossresults[0].Definition + "<\/p> ";
+                strGdesc += "<p><b>Location:<\/b>" + $scope.glossary.glossresults[0].Location + "<\/p>";
+                $scope.tempGresults = [];
+                $scope.tempGresults = {
+                    type: strGtype,
+                    description: strGdesc
+                };
 
-           $scope.rightColArray.splice(0, 0, $scope.tempGresults);
-           // below clearly not working, needs to have a unique value in the api returned array!
-           $scope.rightColArray == eliminateDuplicates($scope.rightColArray);
-            $scope.rightColJson = JSON.stringify($scope.rightColArray);
-           $scope.showLoader = false;
-       }).
-       error(function (data, status, headers, config) {
-           console.log('Error Occured.' + data);
-           $scope.showLoader = false;
-       });
-
-
-   };
+                $scope.rightColArray.splice(0, 0, $scope.tempGresults);
+                // below clearly not working, needs to have a unique value in the api returned array!
+                $scope.rightColArray == eliminateDuplicates($scope.rightColArray);
+                $scope.rightColJson = JSON.stringify($scope.rightColArray);
+                $scope.showLoader = false;
+            }).
+            error(function (data, status, headers, config) {
+                console.log('Error Occured.' + data);
+                $scope.showLoader = false;
+            });
+        };
 
 
     // ** GLOSSARY TAB DATA - end ** //
@@ -904,16 +927,16 @@ app.controller("contractdbCtrl", function($scope, $http) {
         // and fire search in case its value is not empty
         $scope.getContracts();
         $scope.getCategories();
-        $scope.search_term = '';
+        $scope.contracts.search_term = '';
 
         $scope.getnetContracts();
         $scope.getnetCategories();
         $scope.getnetSubCategories();
-        $scope.netsearch_term = '';
+        $scope.networks.netsearch_term = '';
 
         $scope.getAgreements();
         $scope.getGlossary();
-        $scope.gloss_search_term = '';
+        $scope.glossary.gloss_search_term = '';
 
     };
 

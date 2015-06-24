@@ -35,7 +35,8 @@
           <div class="row">
                 <div class="col-md-6 col-sm-6">
 
-<tabset> <tab heading="Contracts">
+<tabset>
+  <tab heading="Contracts">
 
                     <div class="panel panel-default" style="padding: 10px;">
 
@@ -52,7 +53,7 @@
 
                         <div class="form-group input-group">
                             <span class="input-group-addon">Search Contract Name</span>
-                            <input type="text" ng-model="contracts.search_term" class="form-control" placeholder="Discovery">
+                            <input type="text" ng-model="search_term" class="form-control" placeholder="Discovery">
                         </div>
 
 
@@ -60,8 +61,8 @@
                             <span class="input-group-addon">Categories</span>
                             <select
                                 class="form-control"
-                                ng-options="cat as cat.category_name for cat in contracts.categories"
-                                ng-model="contracts.category_item"
+                                ng-options="cat as cat.category_name for cat in categories"
+                                ng-model="category_item"
                                 ng-change="filterCategories()">
                             </select>
                         </div>
@@ -84,7 +85,7 @@
                                         </thead>
                                         <tbody>
 
-                                        <tr ng-repeat="item in contracts.search_results | filterTermAndCategory:contracts.search_term:contracts.category_item">
+                                        <tr ng-repeat="item in search_results | filterTermAndCategory:search_term:category_item">
                                                 <td>
                                                     {{item.contract_name}}
                                                 </td>
@@ -122,15 +123,15 @@
 
                         <div class="form-group input-group">
                             <span class="input-group-addon">Search Term</span>
-                            <input type="text" ng-model="networks.netsearch_term" class="form-control" placeholder="">
+                            <input type="text" ng-model="netsearch_term" class="form-control" placeholder="">
                         </div>
 
                         <div class="form-group input-group">
                             <span class="input-group-addon">Categories</span>
                             <select
                                 class="form-control"
-                                ng-options="netcat as netcat.category for netcat in networks.netcategories"
-                                ng-model="networks.netcategory_item"
+                                ng-options="netcat as netcat.category for netcat in netcategories"
+                                ng-model="netcategory_item"
                                 ng-change="filternetCategories()">
                             </select>
                         </div>
@@ -140,9 +141,9 @@
                                                             <span class="input-group-addon">Subcategories</span>
                                                             <select
                                                                 class="form-control"
-                                                                ng-options="netsubcat as netsubcat.subcategory for netsubcat in networks.netsubcategories"
-                                                                ng-model="networks.netsubcategory_item"
-                                                                ng-change="filternetSubCategories({{networks.netcategory_item.categoryId}})">
+                                                                ng-options="netsubcat as netsubcat.subcategory for netsubcat in netsubcategories"
+                                                                ng-model="netsubcategory_item"
+                                                                ng-change="filternetSubCategories({{netcategory_item.categoryId}})">
                                                             </select>
                                                         </div>
                                                         <!-- ********************************************************** -->
@@ -165,10 +166,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-
-
-
-                                        <tr ng-repeat="item in  networks.netsearch_results | filterTermAndNetworkCategory:networks.netsearch_term:networks.netcategory_item:networks.netsubcategory_item">
+                                        <tr ng-repeat="item in netsearch_results | filterTermAndNetworkCategory:netsearch_term:netcategory_item:netsubcategory_item">
                                                 <td>
                                                       {{item.network}}
                                                 </td>
@@ -190,7 +188,6 @@
                         </div>
                     </div><!--class="col-md-6 col-sm-6"-->
   </tab>
-
   <tab heading="Glossary">
          <div class="panel panel-default" style="padding: 10px;">
 
@@ -217,8 +214,8 @@
                             <span class="input-group-addon">Agreements </span>
                             <select
                                 class="form-control"
-                                ng-options="agrName as agrName.NctcAgreementName for agrName in glossary.agreements"
-                                ng-model="glossary.glossary_agreement_item"
+                                ng-options="agrName as agrName.NctcAgreementName for agrName in agreements"
+                                ng-model="glossary_agreement_item"
                                 ng-change="filterAgreements()">
                             </select>
                         </div>
@@ -226,7 +223,7 @@
 
                         <div class="form-group input-group">
                             <span class="input-group-addon">Search Term</span>
-                            <input type="text" ng-model="glossary.gloss_search_term" class="form-control" placeholder="enter glossary term">
+                            <input type="text" ng-model="gloss_search_term" class="form-control" placeholder="enter glossary term">
                         </div>
 
 
@@ -250,7 +247,7 @@
                                         </thead>
                                         <tbody>
 
-                                        <tr ng-repeat="item in glossary.gloss_search_results | filterGlossaryTermAndAgreement:glossary.gloss_search_term:glossary.glossary_agreement_item">
+                                        <tr ng-repeat="item in gloss_search_results | filterGlossaryTermAndAgreement:gloss_search_term:glossary_agreement_item">
                                                 <td>
                                                     {{item.NctcAgreementName}}
                                                 </td>
