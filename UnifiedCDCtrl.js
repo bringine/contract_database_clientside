@@ -9,10 +9,19 @@
         }else{
             var filtered = [];
 
-
-            if(category !== null && category !== undefined && category.lookup_section_categoriesid==0){
-                category===null;
+            //---------------------------------------------------------------------------------------------//
+            // ***  clear out dropdowns and search terms if necessary...
+            if(category !== null && category !== undefined && category.lookup_section_categoriesid===0){
+                console.log('category.lookup_section_categoriesid ',category.lookup_section_categoriesid );
+                category=null;
+                console.log('category ',category);
             }
+
+            if(search_term !== null && search_term !== undefined && search_term.length<1){
+                search_term='';
+            }
+            //---------------------------------------------------------------------------------------------//
+
 
           //    if (category !== undefined) {
           //        if (category.lookup_section_categoriesid==0) {
@@ -89,6 +98,26 @@
             console.log('items is null so do nothing');
         }else{
             var filtered = [];
+            //---------------------------------------------------------------------------------------------//
+            // ***  clear out dropdowns and search terms if necessary...
+            if(netcategory !== null && netcategory !== undefined && netcategory.categoryid===0){
+               // console.log('netcategory.categoryId ',netcategory.categoryid );
+              //  console.log('netcategory.subcategoryId ',netsubcategory.subcategoryId );
+                netcategory=null;
+                netsubcategory=null;
+               // console.log('netcategory ',netcategory);
+            }
+
+        //    if(netsubcategory !== null && netsubcategory !== undefined && netsubcategory.subcategoryId===0){
+        //       // console.log('netcategory.subcategoryId ',netsubcategory.subcategoryId );
+        //        netsubcategory=null;
+        //       // console.log('netsubcategory ',netsubcategory);
+        //    }
+
+            if(netsearch_term !== null && netsearch_term !== undefined && netsearch_term.length<1){
+                netsearch_term='';
+            }
+            //---------------------------------------------------------------------------------------------//
            // console.log('netsearch_term= ', netsearch_term);
 
             // if both search_term and category
@@ -169,9 +198,20 @@
         }else{
             var filtered = [];
 
-            if(agreement !== null && agreement !== undefined && agreement.AgreementId==0){
+                        //---------------------------------------------------------------------------------------------//
+            // ***  clear out dropdowns and search terms if necessary...
+
+            if(agreement !== null && agreement !== undefined && agreement.AgreementId===0){
                 agreement=null;
             }
+
+            if(gloss_search_term !== null && gloss_search_term !== undefined && gloss_search_term.length<1){
+                gloss_search_term='';
+            }
+            //---------------------------------------------------------------------------------------------//
+
+
+
 
             // if both search_term and category
             if((gloss_search_term.length > 1) &&
@@ -265,7 +305,6 @@
                 }
           }
         })
-
        app.directive('tabset', function() {
       return {
         restrict: 'E',
@@ -300,33 +339,31 @@
 
 
 // ** CONTROLLER SECTION - START ** //
-//app.controller("contractCtrl", function($scope, $http) {
 app.controller("contractdbCtrl", function($scope, $http) {
 
     $scope.contracts = [];
-    //$scope.search_results = [];
-    //$scope.categories = [];
-    //$scope.results = [];
-    $scope.showLoader = false;
+        //$scope.contracts.search_results = [];
+        //$scope.contracts.categories = [];
+        //$scope.contracts.results = [];
+        //$scope.contracts.showLoader = false;
     $scope.displayResultText = '';
     $scope.displayResultTitle = '';
     $scope.categoryRealFilter = '';
 
-    //$scope.subcategories = [];
     $scope.subcategoryRealFilter = '';
     $scope.agreementRealFilter = '';
 
     $scope.networks = [];
-     //  $scope.netcategories = [];
-     //  $scope.netsubcategories = [];
+         //  $scope.networks.netcategories = [];
+         //  $scope.networks.netsubcategories = [];
+         //  $scope.networks.netresults = [];
+         //  $scope.networks.netsearch_results = [];
     $scope.netcategoryRealFilter = '';
-     //  $scope.netsubcategoryRealFilter = '';
-     //  $scope.netresults = [];
-     // $scope.netsearch_results = [];
+    $scope.netsubcategoryRealFilter = '';
 
     $scope.glossary = [];
-   // $scope.gloss_search_results = [];
-   // $scope.glossresults = [];
+        // $scope.glossary.gloss_search_results = [];
+        // $scope.glossary.glossresults = [];
 
     $scope.rightColArray =[];
     $scope.rightColJson =[];
@@ -346,19 +383,18 @@ app.controller("contractdbCtrl", function($scope, $http) {
     // ** scope filter for Contracts - end ** //
 
     // ** scope filter for Network - start ** //
-   $scope.filternetCategories = function (){
+    $scope.filternetCategories = function (){
       //  console.log('going to filter, sets $scope.networks.netcategory_item.categoryId', $scope.networks.netcategory_item.categoryId);
-        $scope.netcategoryRealFilter = $scope.contracts.networks.netcategory_item.category;  //$scope.category_item.categoryId;   //TH 6/15/2015
+        $scope.netcategoryRealFilter = $scope.networks.netcategory_item.category;  //$scope.category_item.categoryId;   //TH 6/15/2015
       //   console.log('filterCategories: networks.netcategory | networks.netcategoryId = ', $scope.networks.netcategory_item.category + ' | ' + $scope.networks.netcategory_item.categoryId);
-         $scope.getnetSubCategories($scope.contracts.networks.netcategory_item.categoryId);
+         $scope.getnetSubCategories($scope.networks.netcategory_item.categoryId);
     };
-
 
     $scope.filternetSubCategories = function (ci){
         console.log('going to filter subcategories.', ci);
         $scope.netsubcategoryRealFilter = $scope.networks.netsubcategory_item.subcategory;  //$scope.category_item.categoryId;   //TH 6/15/2015
           console.log('filterSubCategories: networks.netsubcategory | networks.netsubcategoryId = ',$scope.networks.netsubcategory_item.subcategory + ' | ' + $scope.networks.netsubcategory_item.subcategoryId);
-          console.log('filterCategories: networks.netcategory | networks.netcategoryId = ', $scope.networks.netcategory_item.category + ' | ' + $scope.networks.netcategory_item.categoryId);
+        //  console.log('filterCategories: networks.netcategory | networks.netcategoryId = ', $scope.networks.netcategory_item.category + ' | ' + $scope.networks.netcategory_item.categoryId);
     };
 
     // ** scope filter for Network - end ** //
@@ -383,16 +419,16 @@ app.controller("contractdbCtrl", function($scope, $http) {
 
         $scope.getContracts = function() {
           var url = 'http://10.5.1.25:4000/api/contract_databases/getContracts';
-           $scope.showLoader = true;
+           $scope.contracts.showLoader = true;
            $http.post(url).
                 success(function(data, status, headers, config) {
                     $scope.contracts.search_results = data.data;
-                    $scope.showLoader = false;
+                    $scope.contracts.showLoader = false;
                     //console.log('got results back! %d', $scope.search_results.length);
                 }).
                 error(function(data, status, headers, config) {
                     console.log('Error Occured.' + data);
-                    $scope.showLoader = false;
+                    $scope.contracts.showLoader = false;
                 });
         };
 
@@ -501,6 +537,12 @@ app.controller("contractdbCtrl", function($scope, $http) {
         $http.post(url).
             success(function(data, status, headers, config) {
                 $scope.networks.netcategories = data.data;
+                   var blank_obj =
+                    {
+                      "categoryid": 0,
+                      "category": "- Not Selected - ",
+                    };
+                 $scope.networks.netcategories.push(blank_obj);
                 $scope.networks.netcategories =
                     $scope.networks.netcategories.sort(function(a, b){
                     var nameA=a.category.toLowerCase();
@@ -526,7 +568,13 @@ app.controller("contractdbCtrl", function($scope, $http) {
             $http.post(url).
                 success(function(data, status, headers, config) {
                     $scope.networks.netsubcategories = data.data;
-
+                    //       var blank_obj =
+                    //        {
+                    //          "categoryId": 0,
+                    //          "subcategoryId": 0,
+                    //          "subcategory": "- Not Selected - ",
+                    //        };
+                    //     $scope.networks.netsubcategories.push(blank_obj);
                     $scope.networks.netsubcategories =
                         $scope.networks.netsubcategories.sort(function(g, h){
                         var nameG=g.subcategory.toLowerCase();
@@ -555,16 +603,16 @@ app.controller("contractdbCtrl", function($scope, $http) {
 
         $scope.getnetContracts = function() {
            var url = 'http://10.5.1.25:4000/api/bulkcalcs/networkGrid';
-           $scope.showLoader = true;
+           $scope.networks.showLoader = true;
            $http.post(url).
                 success(function(data, status, headers, config) {
                     $scope.networks.netsearch_results = data.data;
-                    $scope.showLoader = false;
+                    $scope.networks.showLoader = false;
                     //console.log('got results back! %d', $scope.netsearch_results.length);
                 }).
                 error(function(data, status, headers, config) {
                     console.log('Error Occured.' + data);
-                    $scope.showLoader = false;
+                    $scope.networks.showLoader = false;
                 });
         };
 
@@ -748,7 +796,7 @@ app.controller("contractdbCtrl", function($scope, $http) {
             var url = 'http://10.5.1.25:4000/api/bulkcalcs/glossaryDetailTerms';
             //returns NctcAgreementName, GlossaryTerm, Definition, Location for a given AgreementGlossaryOfTermsId
             console.log('function i value = ' + i);
-            $scope.showLoader = true;
+            $scope.glossary.showLoader = true;
             //post_vars =
             $http.post(url, {
                 AgreementGlossaryOfTermsId: i
@@ -772,11 +820,11 @@ app.controller("contractdbCtrl", function($scope, $http) {
                 // below clearly not working, needs to have a unique value in the api returned array!
                 $scope.rightColArray == eliminateDuplicates($scope.rightColArray);
                 $scope.rightColJson = JSON.stringify($scope.rightColArray);
-                $scope.showLoader = false;
+                $scope.glossary.showLoader = false;
             }).
             error(function (data, status, headers, config) {
                 console.log('Error Occured.' + data);
-                $scope.showLoader = false;
+                $scope.glossary.showLoader = false;
             });
         };
 

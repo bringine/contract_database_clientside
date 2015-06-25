@@ -35,11 +35,12 @@
           <div class="row">
                 <div class="col-md-6 col-sm-6">
 
-<tabset> <tab heading="Contracts">
+<tabset>
+    <tab heading="Contracts">
 
                     <div class="panel panel-default" style="padding: 10px;">
 
-                        <div ng-show="showLoader" style="float: right; width: 100px;padding-left: 10px;">
+                        <div ng-show="contracts.showLoader" style="float: right; width: 100px;padding-left: 10px;">
 
                             <div class="spinner" style="margin: 0px; float: right;">
                               <div class="rect1"></div>
@@ -109,7 +110,7 @@
   <tab heading="Networks">
                    <div class="panel panel-default" style="padding: 10px;">
 
-                        <div ng-show="showLoader" style="float: right; width: 100px;padding-left: 10px;">
+                        <div ng-show="networks.showLoader" style="float: right; width: 100px;padding-left: 10px;">
 
                             <div class="spinner" style="margin: 0px; float: right;">
                               <div class="rect1"></div>
@@ -205,13 +206,7 @@
                             </div>
                         </div>
 
-
-                        <!--
-                        <button ng-click="getResult()" id="btnMakeCall">getResult</button>
-                        <button ng-click="getNetworks()" id="btnMakeCall">getNetworks</button>
-                        <button ng-click="getCategories()" id="btnMakeCall">getCategories</button>
-                        -->
-
+ 
       <!-- can angular only show unique valuse in this, or is it necessary to determine in the filterAgreements js function?  -->
                         <div class="form-group input-group">
                             <span class="input-group-addon">Agreements </span>
@@ -282,17 +277,17 @@
 
 <div class="col-md-6 col-sm-6">
 
-    <a href="#" class="btn btn-default btn-sm" ng-click="clearArray()">Clear All</a>
 
+
+
+    <a href="#" class="btn btn-default btn-sm" ng-click="clearArray()">Clear All</a>
 
     <div ng-repeat="(key,r) in rightColArray">
         <div ng-init="display=true">
-            <div class="panel panel-default" style="padding: 10px; overflow:auto;">
-
+            <div class="panel panel-default" style="padding: 10px; overflow:auto; border-radius: 15px; border: 1px;">
                 <p ng-bind-html="r.type"></p>
-
                 <p ng-show="display" ng-bind-html="r.description"> </p>
-                <div class="btn-group btn-group-sm">
+                <div class="btn-group btn-group-xs">
                     <a class="btn btn-default" href="#" role="button" ng-click="removeElement(key)">Remove</a>
                     <a class="btn btn-default" href="#" role="button" ng-click="moveElementUp(key)">Move Up</a>
                     <a class="btn btn-default" href="#" role="button" ng-click="moveElementDown(key)">Move Down</a> &nbsp;&nbsp;&nbsp;&nbsp;

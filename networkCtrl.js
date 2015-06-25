@@ -444,6 +444,14 @@ app.controller("contractdbCtrl", function($scope, $http) {
     //    }
     };
 
+   // ************************************  drag-n-drop   ************************************  //
+
+
+
+
+   // ************************************  drag-n-drop   ************************************  //
+
+
     var init = function () {
         // check if there is query in url
         // and fire search in case its value is not empty

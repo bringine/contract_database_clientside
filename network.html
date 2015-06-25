@@ -134,29 +134,39 @@
  interactions with left panels - ng-repeat of array items, not using table rows - TH  -->
 
 
-                 <div class="col-md-6 col-sm-6">
-                    <a href="#" class="btn btn-success" ng-click="clearArray()">Clear All</a>
-                    <!--div  ng-repeat="r in rightColArray"-->
-      <div  ng-repeat="(key,r) in rightColArray">
-                        <div class="panel panel-default" style="padding: 10px; overflow:auto;" >
-                         <div><p  ng-bind-html="r.type"></p></div>
-                           <div><p  ng-bind-html="r.description"> </p></div>
+
+<div class="col-md-6 col-sm-6">
 
 
-                            <a href="#" class="btn btn-success" ng-click="removeElement(key)">remove</a>
-                        <!--     ID = {{r.DisplayId }} <BR>
-                            last index =  {{ r.lastIndexOf(key) }}  <BR>
-                            NG-repeat index (actual display index) = {{ $index }}<BR-->
-                             <a href="#" class="btn btn-success" ng-click="moveElementUp(key)">move up one</a>   &nbsp;
-                            <a href="#" class="btn btn-success" ng-click="moveElementDown(key)">move down one</a>
-                        </div>
-                    </div>
 
+
+    <a href="#" class="btn btn-default btn-sm" ng-click="clearArray()">Clear All</a>
+
+    <div ng-repeat="(key,r) in rightColArray">
+        <div ng-init="display=true">
+            <div class="panel panel-default" style="padding: 10px; overflow:auto; border-radius: 15px; border: 2px solid #8AC007;">
+
+                <p ng-bind-html="r.type"></p>
+
+                <p ng-show="display" ng-bind-html="r.description"> </p>
+                <div class="btn-group btn-group-sm">
+                    <a class="btn btn-default" href="#" role="button" ng-click="removeElement(key)">Remove</a>
+                    <a class="btn btn-default" href="#" role="button" ng-click="moveElementUp(key)">Move Up</a>
+                    <a class="btn btn-default" href="#" role="button" ng-click="moveElementDown(key)">Move Down</a> &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="" ng-show="display" ng-click="display=!display" class="btn btn-default">Collapse</a>
+                    <a href="" ng-show="!display" ng-click="display=!display" class="btn btn-default">Expand</a>
                 </div>
+            </div>
+        </div>
+        <!-- ng-init -->
+
+    </div>
+
+    </div>
+</div>
 
 
-
-
+<!--   {{myJsonString | json}}  -->
 
 
             </div>
@@ -168,10 +178,14 @@
 
 
 
+
+
+
+
     <!-- script block -->
     <script src="contractApp.js"></script>
-    <!--script src="networkCtrl.js"></script-->
-    <script src="UnifiedCDCtrl.js"></script>
+    <script src="networkCtrl.js"></script>
+    <!--script src="UnifiedCDCtrl.js"></script-->
     <!-- end of script block -->
 </body>
 </html>
