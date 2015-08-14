@@ -517,7 +517,6 @@ app.controller("contractdbCtrl", function ($scope, $http) {
                     $scope.contracts.results = data.data;
                     // TH //  need to put this item into the right column display collector array...
                     /////console.log('$scope.results[0].type', scope.results[0].type);
-                    console.log($scope);
                     console.log('$scope.results[0].id  ', $scope.contracts.results[0].id);
                     console.log('$scope.results[0].display_id  ', $scope.contracts.results[0].display_id);
                     //      $scope.rightColArray.splice(0, 0,$scope.results);
