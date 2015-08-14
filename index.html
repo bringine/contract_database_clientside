@@ -58,7 +58,7 @@
 
 
                         <div class="form-group input-group">
-                            <span class="input-group-addon">Categories</span>
+                            <span class="input-group-addon">Types</span>
                             <select
                                 class="form-control"
                                 ng-options="cat as cat.category_name for cat in contracts.categories"
@@ -139,7 +139,7 @@
                                                         <!-- ********************************************************** -->
                                                         <div class="form-group input-group">
                                                             <span class="input-group-addon">Subcategories</span>
-                                                            <select
+                                                            <select  ng-disabled="subCategoryDisabled"
                                                                 class="form-control"
                                                                 ng-options="netsubcat as netsubcat.subcategory for netsubcat in networks.netsubcategories"
                                                                 ng-model="networks.netsubcategory_item"
@@ -279,20 +279,24 @@
 
 
 
-
+    <a href="#" class="btn btn-default btn-sm" ng-click="collapseArray()">Collapse All</a>
     <a href="#" class="btn btn-default btn-sm" ng-click="clearArray()">Clear All</a>
 
     <div ng-repeat="(key,r) in rightColArray">
-        <div ng-init="display=true">
-            <div class="panel panel-default" style="padding: 10px; overflow:auto; border-radius: 15px; border: 1px;">
-                <p ng-bind-html="r.type"></p>
-                <p ng-show="display" ng-bind-html="r.description"> </p>
+        <div>
+            <div class="panel panel-default" style="padding: 10px; overflow:auto; border-radius: 15px; border: 1px; border-left: {{r.color}} solid 15px;">
+                <p  ng-show="!r.display">
+                    {{r.collapsed1}}<br />
+                    {{r.collapsed2}}<br />
+                    {{r.collapsed3}}<br />
+                </p>
+                <p ng-show="r.display" ng-bind-html="r.description"> </p>
                 <div class="btn-group btn-group-xs">
-                    <a class="btn btn-default" href="#" role="button" ng-click="removeElement(key)">Remove</a>
-                    <a class="btn btn-default" href="#" role="button" ng-click="moveElementUp(key)">Move Up</a>
-                    <a class="btn btn-default" href="#" role="button" ng-click="moveElementDown(key)">Move Down</a> &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="" ng-show="display" ng-click="display=!display" class="btn btn-default">Collapse</a>
-                    <a href="" ng-show="!display" ng-click="display=!display" class="btn btn-default">Expand</a>
+                    <a class="btn btn-default" href="#" role="button" ng-click="removeElement(key)"><img src="/assets/images/1439540269_ban.png"  alt="remove" style="height:18px;"/></a>
+                    <a class="btn btn-default" href="#" role="button" ng-click="moveElementUp(key)"><img src="/assets/images/1439540757_double-arrow-up.png"  alt="remove" style="height:18px;"/></a>
+                    <a class="btn btn-default" href="#" role="button" ng-click="moveElementDown(key)"><img src="/assets/images/1439540766_double-arrow-down.png"  alt="remove" style="height:18px;"/></a> &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="" ng-show="r.display" ng-click="r.display=!r.display" class="btn btn-default"><img src="/assets/images/1439540773_upload.png"  alt="remove" style="height:18px;"/></a>
+                    <a href="" ng-show="!r.display" ng-click="r.display=!r.display" class="btn btn-default"><img src="/assets/images/1439540780_download.png"  alt="remove" style="height:18px;"/></a>
                 </div>
             </div>
         </div>
